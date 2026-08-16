@@ -31,6 +31,7 @@ jobs:
       DOTNET_NOLOGO: true
     permissions:
       contents: write
+      id-token: write
     steps:
       - name: 🧾 Checkout
         uses: actions/checkout@v6
