@@ -1,0 +1,29 @@
+{
+  "files": [
+    "**/*.*"
+  ],
+  "ignorePaths": [
+    "**/badges/**/*.*",
+    "**/coverage/**/*.*",
+    "**/obj/**/*.*",
+    "**/bin/**/*.*",
+    "**/nupkg/**/*.*"
+  ],
+  "words": [
+    "Boxless",
+    "buildtransitive",
+    "contentfiles",
+    "Chickensoft",
+    "Cubusky",
+    "devbuild",
+    "hitpoints",
+    "manapoints",
+    "msbuild",
+    "netstandard",
+    "reentrancy",
+    "runsettings",
+    "Shouldly",
+    "Uncapitalize",
+    "Xunit",
+  ]
+}

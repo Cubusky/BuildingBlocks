@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Cubusky.BuildingBlocks.Tests/Cubusky.BuildingBlocks.Tests.csproj" Id="4afb5d2d-3667-4501-ab23-df7e131afdf6" />
+  <Project Path="Cubusky.BuildingBlocks/Cubusky.BuildingBlocks.csproj" />
+</Solution>
