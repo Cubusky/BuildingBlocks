@@ -74,6 +74,5 @@ jobs:
     if: needs.auto_release.outputs.should_release == 'true'
     secrets:
       NUGET_USER: ${{ secrets.NUGET_USER }}
-      GH_BASIC: ${{ secrets.GH_BASIC }}
     with:
       bump: patch
