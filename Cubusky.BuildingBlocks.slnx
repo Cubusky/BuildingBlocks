@@ -6,6 +6,7 @@
     <File Path="LICENSE" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="Cubusky.BuildingBlocks/Cubusky.BuildingBlocks.csproj" />
+  <Project Path="Cubusky.BuildingBlocks.Reactivity.Tests/Cubusky.BuildingBlocks.Reactivity.Tests.csproj" Id="13ddb0a4-8e0f-4dbd-a759-2b9a7113a94d" />
   <Project Path="Cubusky.BuildingBlocks.Tests/Cubusky.BuildingBlocks.Tests.csproj" Id="4afb5d2d-3667-4501-ab23-df7e131afdf6" />
+  <Project Path="Cubusky.BuildingBlocks/Cubusky.BuildingBlocks.csproj" />
 </Solution>

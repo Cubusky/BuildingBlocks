@@ -4,17 +4,21 @@ namespace Cubusky.BuildingBlocks.Collections;
 
 public interface IOperationMap
 {
-    void Set<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
-        where TConformance : class
-        where TOperation : struct, IOperation<TConformance>;
+    void Clear();
 
     void Add<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>;
 
-    void Clear();
+    void Add<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>;
 
-    bool ContainsKey<TConformance, TOperation>()
+    void Set<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>;
+
+    void Set<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>;
 
@@ -22,7 +26,15 @@ public interface IOperationMap
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>;
 
+    bool Remove<TConformance, TOperation, TArgs>()
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>;
+
     bool TryGetValue<TConformance, TOperation>([NotNullWhen(true)] out OperationCallback<TConformance, TOperation>? callback)
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>;
+
+    bool TryGetValue<TConformance, TOperation, TArgs>([NotNullWhen(true)] out OperationCallback<TConformance, TOperation, TArgs>? callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>;
 }

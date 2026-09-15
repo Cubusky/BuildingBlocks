@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 
 namespace Cubusky.BuildingBlocks.Collections;
 
@@ -7,55 +6,74 @@ public sealed class OperationMap : IOperationMap, IReadOnlyOperationMap
 {
     public static OperationMap Shared { get; } = new();
 
-    private Dictionary<(Type Conformance, Type Operation), Delegate> Operations { get; } = [];
+    private static readonly Type VoidType = typeof(void);
 
-    private static class OperationInitializer<TOperation>
-        where TOperation : struct
-    {
-        static OperationInitializer() => RuntimeHelpers.RunClassConstructor(typeof(TOperation).TypeHandle);
+    private Dictionary<(Type Conformance, Type Operation, Type Args), Delegate> Operations { get; } = [];
 
-        internal static void Ensure() { }
-    }
-
-    #region IReadOnlyOperationMap Implementation
     public int Count => Operations.Count;
 
-    public bool ContainsKey<TConformance, TOperation>()
+    public void Clear() => Operations.Clear();
+
+    public void Add<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        OperationInitializer<TOperation>.Ensure();
-        for (Type type = typeof(TConformance); type != null; type = type.BaseType)
-        {
-            if (Operations.ContainsKey((type, typeof(TOperation))))
-            {
-                return true;
-            }
-        }
-        return false;
+        Initializer<TOperation>.Ensure();
+        Operations.Add((typeof(TConformance), typeof(TOperation), VoidType), callback);
     }
 
-    public OperationCallback<TConformance, TOperation> Get<TConformance, TOperation>()
+    public void Add<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        OperationInitializer<TOperation>.Ensure();
-        return TryGetValue<TConformance, TOperation>(out var callback)
-            ? callback
-            : throw new KeyNotFoundException($"No operation callback registered for conformance {typeof(TConformance)} and operation {typeof(TOperation)}.");
+        Initializer<TOperation>.Ensure();
+        Operations.Add((typeof(TConformance), typeof(TOperation), typeof(TArgs)), callback);
+    }
+
+    public void Set<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>
+    {
+        Initializer<TOperation>.Ensure();
+        Operations[(typeof(TConformance), typeof(TOperation), VoidType)] = callback;
+    }
+
+    public void Set<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>
+    {
+        Initializer<TOperation>.Ensure();
+        Operations[(typeof(TConformance), typeof(TOperation), typeof(TArgs))] = callback;
+    }
+
+    public bool Remove<TConformance, TOperation>()
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>
+    {
+        Initializer<TOperation>.Ensure();
+        return Operations.Remove((typeof(TConformance), typeof(TOperation), VoidType));
+    }
+
+    public bool Remove<TConformance, TOperation, TArgs>()
+        where TConformance : class
+        where TOperation : struct, IOperation<TConformance>
+    {
+        Initializer<TOperation>.Ensure();
+        return Operations.Remove((typeof(TConformance), typeof(TOperation), typeof(TArgs)));
     }
 
     public bool TryGetValue<TConformance, TOperation>([NotNullWhen(true)] out OperationCallback<TConformance, TOperation>? callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        OperationInitializer<TOperation>.Ensure();
+        Initializer<TOperation>.Ensure();
 
-        for (Type type = typeof(TConformance); type != null; type = type.BaseType)
+        var operationType = typeof(TOperation);
+        for (var conformanceType = typeof(TConformance); conformanceType is not null; conformanceType = conformanceType.BaseType)
         {
-            if (Operations.TryGetValue((type, typeof(TOperation)), out var @delegate))
+            if (Operations.TryGetValue((conformanceType, operationType, VoidType), out var voidDel))
             {
-                callback = (OperationCallback<TConformance, TOperation>)@delegate;
+                callback = (OperationCallback<TConformance, TOperation>)voidDel;
                 return true;
             }
         }
@@ -63,33 +81,33 @@ public sealed class OperationMap : IOperationMap, IReadOnlyOperationMap
         callback = null;
         return false;
     }
-    #endregion
 
-    #region IOperationMap Implementation
-    public void Add<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
+    public bool TryGetValue<TConformance, TOperation, TArgs>([NotNullWhen(true)] out OperationCallback<TConformance, TOperation, TArgs>? callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        OperationInitializer<TOperation>.Ensure();
-        Operations.Add((typeof(TConformance), typeof(TOperation)), callback);
-    }
+        Initializer<TOperation>.Ensure();
 
-    public void Set<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
-        where TConformance : class
-        where TOperation : struct, IOperation<TConformance>
-    {
-        OperationInitializer<TOperation>.Ensure();
-        Operations[(typeof(TConformance), typeof(TOperation))] = callback;
-    }
+        var operationType = typeof(TOperation);
+        for (var conformanceType = typeof(TConformance); conformanceType is not null; conformanceType = conformanceType.BaseType)
+        {
+            for (var argsType = typeof(TArgs); argsType is not null; argsType = argsType.BaseType)
+            {
+                if (Operations.TryGetValue((conformanceType, operationType, argsType), out var del))
+                {
+                    callback = (OperationCallback<TConformance, TOperation, TArgs>)del;
+                    return true;
+                }
+            }
 
-    public void Clear() => Operations.Clear();
+            if (Operations.TryGetValue((conformanceType, operationType, VoidType), out var voidDel))
+            {
+                callback = (owner, in op, _) => ((OperationCallback<TConformance, TOperation>)voidDel)(owner, in op);
+                return true;
+            }
+        }
 
-    public bool Remove<TConformance, TOperation>()
-        where TConformance : class
-        where TOperation : struct, IOperation<TConformance>
-    {
-        OperationInitializer<TOperation>.Ensure();
-        return Operations.Remove((typeof(TConformance), typeof(TOperation)));
+        callback = null;
+        return false;
     }
-    #endregion
 }
