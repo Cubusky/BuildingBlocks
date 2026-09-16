@@ -31,6 +31,7 @@ public class StatTest
             where TOperation : struct, IOperation<TConformance>
             where TBroadcaster : Broadcaster
         {
+            Initializer<TOperation>.Ensure();
             var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation, TBroadcaster>()
                 ?? OperationMap.Shared.Get<TConformance, TOperation, TBroadcaster>();
             operationCallback(owner, operation, broadcaster);

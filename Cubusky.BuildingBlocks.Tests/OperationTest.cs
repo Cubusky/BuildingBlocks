@@ -21,6 +21,7 @@ public class OperationTest
             where TConformance : class
             where TOperation : struct, IOperation<TConformance>
         {
+            Initializer<TOperation>.Ensure();
             var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation>()
                 ?? OperationMap.Shared.Get<TConformance, TOperation>();
             operationCallback(owner, operation);

@@ -17,57 +17,37 @@ public sealed class OperationMap : IOperationMap, IReadOnlyOperationMap
     public void Add<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        Operations.Add((typeof(TConformance), typeof(TOperation), VoidType), callback);
-    }
+        => Operations.Add((typeof(TConformance), typeof(TOperation), VoidType), callback);
 
     public void Add<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        Operations.Add((typeof(TConformance), typeof(TOperation), typeof(TArgs)), callback);
-    }
+        => Operations.Add((typeof(TConformance), typeof(TOperation), typeof(TArgs)), callback);
 
     public void Set<TConformance, TOperation>(OperationCallback<TConformance, TOperation> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        Operations[(typeof(TConformance), typeof(TOperation), VoidType)] = callback;
-    }
+        => Operations[(typeof(TConformance), typeof(TOperation), VoidType)] = callback;
 
     public void Set<TConformance, TOperation, TArgs>(OperationCallback<TConformance, TOperation, TArgs> callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        Operations[(typeof(TConformance), typeof(TOperation), typeof(TArgs))] = callback;
-    }
+        => Operations[(typeof(TConformance), typeof(TOperation), typeof(TArgs))] = callback;
 
     public bool Remove<TConformance, TOperation>()
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        return Operations.Remove((typeof(TConformance), typeof(TOperation), VoidType));
-    }
+        => Operations.Remove((typeof(TConformance), typeof(TOperation), VoidType));
 
     public bool Remove<TConformance, TOperation, TArgs>()
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
-    {
-        Initializer<TOperation>.Ensure();
-        return Operations.Remove((typeof(TConformance), typeof(TOperation), typeof(TArgs)));
-    }
+        => Operations.Remove((typeof(TConformance), typeof(TOperation), typeof(TArgs)));
 
     public bool TryGetValue<TConformance, TOperation>([NotNullWhen(true)] out OperationCallback<TConformance, TOperation>? callback)
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        Initializer<TOperation>.Ensure();
-
         var operationType = typeof(TOperation);
         for (var conformanceType = typeof(TConformance); conformanceType is not null; conformanceType = conformanceType.BaseType)
         {
@@ -86,8 +66,6 @@ public sealed class OperationMap : IOperationMap, IReadOnlyOperationMap
         where TConformance : class
         where TOperation : struct, IOperation<TConformance>
     {
-        Initializer<TOperation>.Ensure();
-
         var operationType = typeof(TOperation);
         for (var conformanceType = typeof(TConformance); conformanceType is not null; conformanceType = conformanceType.BaseType)
         {

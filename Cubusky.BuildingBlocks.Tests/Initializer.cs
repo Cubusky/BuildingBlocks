@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Cubusky.BuildingBlocks;
+namespace Cubusky.BuildingBlocks.Tests;
 
 public static class Initializer<TValueType>
     where TValueType : struct
