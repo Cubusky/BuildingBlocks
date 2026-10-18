@@ -1,16 +1,28 @@
-# BuildingBlocks
+# 🧱 BuildingBlocks
 
 BuildingBlocks is a generic implementation of the command pattern that allows you to add type-constrained commands onto objects, as if you were extending them with custom-made methods. It is designed for high performance, extensibility and type-safety.
 
+<p align="center">
+<img alt="Cubusky.BuildingBlocks" src="Cubusky.BuildingBlocks/icon.png" width="200">
+</p>
+
 BuildingBlocks allows you to make as many commands, hereto referred to as operations, as you want in the form of structs that implement the `IOperation<T>` interface, where `T` is the type of the class that they should be allowed to perform operations on. This allows you to add operations to a class without modifying its underlying data or exposing its internal state. Because of this rigid type-safety, we can ensure that operations are never boxed and can only be invoked on types that they conform to.
 
-## Extendable and Overridable
+## 🐕 Installation
+
+Find the latest version of [`Cubusky.BuildingBlocks`][nuget] on nuget.
+
+```sh
+dotnet add package Cubusky.BuildingBlocks
+```
+
+## 🪾 Extendable and Overridable
 
 Ever wanted to add a method to a class that you don't own? Or maybe you want to add a method to a class that you do own, but you want to allow users of your class to override the behavior of that method? BuildingBlocks allows you to do both.
 
 It allows **you** to provide sensible defaults and **your users** the freedom to extend and override them.
 
-## Example Usage
+## 🪽 Quick Start
 
 Create a class that implements the `IOperator<T>` interface, where `T` is the type of the class. This sets up the class to be able to perform operations.
 
@@ -73,7 +85,7 @@ Console.WriteLine(first.Value); // Outputs 10
 > }
 > ```
 
-## Initializer pattern
+## 🪺 Initializer pattern
 
 The above code will call `OperationMap.Shared.TryAdd<First, Addition>(Callback);` every time you create a new `Addition` struct, which is not ideal.
 
@@ -124,7 +136,7 @@ public readonly record struct Addition(int Value) : IOperation<First>
 > [!Note]
 > You would think the static constructor of `Addition` would be called when you first create a new `Addition` struct, but because of how structs default initialization works, the static constructor is not called until you first use the `Addition` struct in a method call. This is why we need to call `Initializer<TOperation>.Ensure();` in the `Perform` method of `IOperator<T>`.
 
-## Inheritance
+## 🐣 Inheritance
 
 Inheritance with `IOperator<T>` requires a specific implementation to avoid name collisions with derived classes, especially when combined with interfaces. The following example demonstrates how to safely implement `IOperator<T>` for a base class and a derived class whilst maintaining type-safety and polymorphic behavior.
 
@@ -186,9 +198,9 @@ ifirst.Perform(new Addition(5));
 isecond.Perform(new Addition(5));
 ```
 
-## Command Priority
+## 🐦‍🔥 Operation Priority
 
-Command priority is determined by the arg type first, and the conformance type second. Both are prioritized by their inheritance hierarchy, with the most specific type being prioritized first. This allows you to create commands that can be invoked on a base class, but can also be overridden for more specific types.
+Operation priority is determined by the arg type first, and the conformance type second. Both are prioritized by their inheritance hierarchy, with the most specific type being prioritized first. This allows you to create operations that can be invoked on a base class, but can also be overridden for more specific types.
 
 ```csharp
 public class Example
@@ -197,17 +209,17 @@ public class Example
   public class First : IOperator<First>;
   public class Second : First, IOperator<Second>;
 
-  // Commands
-  public readonly record struct Command : IOperation<First>;
+  // Operations
+  public readonly record struct Operation : IOperation<First>;
 
   // Arguments
   public class A;
   public class B : A;
 
   // Callbacks
-  public static void Min(First owner, in Command command)           => Console.WriteLine("Min");
-  public static void Max(Second owner, in Command command, B args)  => Console.WriteLine("Max");
-  public static void Mid(First owner, in Command command, A args)   => Console.WriteLine("Mid");
+  public static void Min(First owner, in Operation operation) => Console.WriteLine("Min");
+  public static void Max(Second owner, in Operation operation, B args) => Console.WriteLine("Max");
+  public static void Mid(First owner, in Operation operation, A args) => Console.WriteLine("Mid");
 
   // Example
   public static void Main()
@@ -215,19 +227,19 @@ public class Example
     object callback;
     var operationMap = new OperationMap();
 
-    operationMap.Set<First, Command>(Min);
-    callback = operationMap.Get<First, Command>();      // Returns 'Min'.
-    callback = operationMap.Get<Second, Command, B>();  // Returns 'Min'.
+    operationMap.Set<First, Operation>(Min);
+    callback = operationMap.Get<First, Operation>();     // Returns 'Min'.
+    callback = operationMap.Get<Second, Operation, B>(); // Returns 'Min'.
 
-    operationMap.Set<Second, Command, B>(Max);
-    callback = operationMap.Get<First, Command>();      // Returns 'Min'.
-    callback = operationMap.Get<Second, Command, B>();  // Returns 'Max'.
-    callback = operationMap.Get<Second, Command, A>();  // Returns 'Min'.
+    operationMap.Set<Second, Operation, B>(Max);
+    callback = operationMap.Get<First, Operation>();     // Returns 'Min'.
+    callback = operationMap.Get<Second, Operation, B>(); // Returns 'Max'.
+    callback = operationMap.Get<Second, Operation, A>(); // Returns 'Min'.
 
-    operationMap.Set<First, Command, A>(Mid);
-    callback = operationMap.Get<Second, Command, B>();  // Returns 'Max'.
-    callback = operationMap.Get<Second, Command, A>();  // Returns 'Mid'.
-    callback = operationMap.Get<Second, Command>();     // Returns 'Min'.
+    operationMap.Set<First, Operation, A>(Mid);
+    callback = operationMap.Get<Second, Operation, B>(); // Returns 'Max'.
+    callback = operationMap.Get<Second, Operation, A>(); // Returns 'Mid'.
+    callback = operationMap.Get<Second, Operation>();    // Returns 'Min'.
   }
 }
 ```
