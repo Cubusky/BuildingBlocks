@@ -10,7 +10,7 @@ BuildingBlocks allows you to make as many commands, hereto referred to as operat
 
 ## 🐕 Installation
 
-Find the latest version of [`Cubusky.BuildingBlocks`][nuget] on nuget.
+Find the latest version of [Cubusky.BuildingBlocks][nuget] on nuget.
 
 ```sh
 dotnet add package Cubusky.BuildingBlocks
@@ -243,3 +243,7 @@ public class Example
   }
 }
 ```
+
+<!-- Links -->
+
+[nuget]: https://www.nuget.org/packages/Cubusky.BuildingBlocks
