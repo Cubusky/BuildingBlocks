@@ -3,6 +3,7 @@
     <File Path=".csharpierrc.json" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
+    <File Path="CONTRIBUTING.md" />
     <File Path="cspell.json" />
     <File Path="global.json" />
     <File Path="LICENSE" />
@@ -11,6 +12,7 @@
   <Folder Name="/Solution Items/.github/" />
   <Folder Name="/Solution Items/.github/workflows/">
     <File Path=".github/workflows/auto_release.yaml" />
+    <File Path=".github/workflows/formatting_check.yaml" />
     <File Path=".github/workflows/release.yaml" />
     <File Path=".github/workflows/spellcheck.yaml" />
     <File Path=".github/workflows/tests.yaml" />
