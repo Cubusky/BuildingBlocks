@@ -1,10 +1,19 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".csharpierrc.json" />
+    <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path="cspell.json" />
     <File Path="global.json" />
     <File Path="LICENSE" />
     <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Solution Items/.github/" />
+  <Folder Name="/Solution Items/.github/workflows/">
+    <File Path=".github/workflows/auto_release.yaml" />
+    <File Path=".github/workflows/release.yaml" />
+    <File Path=".github/workflows/spellcheck.yaml" />
+    <File Path=".github/workflows/tests.yaml" />
   </Folder>
   <Project Path="Cubusky.BuildingBlocks.Reactivity.Tests/Cubusky.BuildingBlocks.Reactivity.Tests.csproj" Id="13ddb0a4-8e0f-4dbd-a759-2b9a7113a94d" />
   <Project Path="Cubusky.BuildingBlocks.Tests/Cubusky.BuildingBlocks.Tests.csproj" Id="4afb5d2d-3667-4501-ab23-df7e131afdf6" />
