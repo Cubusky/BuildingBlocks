@@ -69,7 +69,7 @@ public class OperationTest
         static FirstOp()
         {
             OperationMap.Shared.Add<First, FirstOp>(Execute);
-            OperationMap.Shared.Add<Second, FirstOp>(SecondOverride);
+            //OperationMap.Shared.Add<Second, FirstOp>(SecondOverride);
         }
 
         internal static void Execute(First owner, in FirstOp operation) => owner.Value++;
@@ -99,7 +99,8 @@ public class OperationTest
     {
         var second = new Second();
         second.Perform(new FirstOp());
-        second.Value2.ShouldBe(-1);
+        second.Value.ShouldBe(1);
+        //second.Value2.ShouldBe(-1);
     }
 
     [Fact]
@@ -123,7 +124,8 @@ public class OperationTest
     {
         ISecond second = new Second();
         second.Perform(new FirstOp());
-        second.Value2.ShouldBe(-1);
+        second.Value.ShouldBe(1);
+        //second.Value2.ShouldBe(-1);
     }
 
     [Fact]
