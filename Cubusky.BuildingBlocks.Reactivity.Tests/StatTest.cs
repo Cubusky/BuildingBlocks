@@ -32,8 +32,7 @@ public class StatTest
             where TBroadcaster : Broadcaster
         {
             Initializer<TOperation>.Ensure();
-            var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation, TBroadcaster>()
-                ?? OperationMap.Shared.Get<TConformance, TOperation, TBroadcaster>();
+            var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation, TBroadcaster>() ?? OperationMap.Shared.Get<TConformance, TOperation, TBroadcaster>();
             operationCallback(owner, operation, broadcaster);
         }
 
@@ -67,7 +66,8 @@ public class StatTest
 
         public class Binding : SyncBinding
         {
-            internal Binding(ISyncSubject subject) : base(subject) { }
+            internal Binding(ISyncSubject subject)
+                : base(subject) { }
 
             public Binding On<TOperation>(Callback<TOperation> callback, Condition<TOperation>? condition = null)
                 where TOperation : struct, IOperation<Stat>
@@ -81,8 +81,7 @@ public class StatTest
     public interface IHitPoints : IStat, IOperator<HitPoints>, IAutoObject<HitPoints.Binding>
     {
         new void Perform<TOperation>(in TOperation operation)
-            where TOperation : struct, IOperation<HitPoints>
-            => ((IOperator<HitPoints>)this).Perform(in operation);
+            where TOperation : struct, IOperation<HitPoints> => ((IOperator<HitPoints>)this).Perform(in operation);
 
         new HitPoints.Binding Bind();
     }
@@ -102,7 +101,8 @@ public class StatTest
 
         public new class Broadcaster : Stat.Broadcaster
         {
-            internal Broadcaster(SyncSubject subject) : base(subject) { }
+            internal Broadcaster(SyncSubject subject)
+                : base(subject) { }
 
             public new void Broadcast<TOperation>(in TOperation operation)
                 where TOperation : struct, IOperation<HitPoints>
@@ -113,7 +113,8 @@ public class StatTest
 
         public new class Binding : Stat.Binding
         {
-            internal Binding(ISyncSubject subject) : base(subject) { }
+            internal Binding(ISyncSubject subject)
+                : base(subject) { }
 
             public new Binding On<TOperation>(Callback<TOperation> callback, Condition<TOperation>? condition = null)
                 where TOperation : struct, IOperation<HitPoints>
@@ -159,8 +160,7 @@ public class StatTest
         int value = 0;
 
         var stat = new Stat();
-        using var binding = stat.Bind()
-            .On((in Increase increase) => value = increase.Value);
+        using var binding = stat.Bind().On((in Increase increase) => value = increase.Value);
 
         stat.Perform(new Increase(10));
 
@@ -170,20 +170,20 @@ public class StatTest
     [Fact]
     public void Test2()
     {
-        OperationMap.Shared.Set<HitPoints, Heal, HitPoints.Broadcaster>((owner, in operation, broadcaster) =>
-        {
-            owner.Value -= operation.Value;
-            broadcaster.Broadcast(in operation);
-            broadcaster.Broadcast(new Increase(operation.Value));
-        });
+        OperationMap.Shared.Set<HitPoints, Heal, HitPoints.Broadcaster>(
+            (owner, in operation, broadcaster) =>
+            {
+                owner.Value -= operation.Value;
+                broadcaster.Broadcast(in operation);
+                broadcaster.Broadcast(new Increase(operation.Value));
+            }
+        );
 
         int value1 = 0;
         int value2 = 0;
 
         var hitPoints = new HitPoints();
-        using var binding = hitPoints.Bind()
-            .On((in Increase increase) => value1 = increase.Value)
-            .On((in Heal heal) => value2 = heal.Value);
+        using var binding = hitPoints.Bind().On((in Increase increase) => value1 = increase.Value).On((in Heal heal) => value2 = heal.Value);
 
         hitPoints.Perform(new Heal(10));
 
@@ -197,8 +197,7 @@ public class StatTest
         int value = 0;
 
         IStat stat = new Stat();
-        using var binding = stat.Bind()
-            .On((in Increase increase) => value = increase.Value);
+        using var binding = stat.Bind().On((in Increase increase) => value = increase.Value);
 
         stat.Perform(new Increase(10));
 
@@ -212,9 +211,7 @@ public class StatTest
         int value2 = 0;
 
         IHitPoints hitPoints = new HitPoints();
-        using var binding = hitPoints.Bind()
-            .On((in Increase increase) => value1 = increase.Value)
-            .On((in Heal heal) => value2 = heal.Value);
+        using var binding = hitPoints.Bind().On((in Increase increase) => value1 = increase.Value).On((in Heal heal) => value2 = heal.Value);
 
         hitPoints.Perform(new Heal(10));
 

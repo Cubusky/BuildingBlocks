@@ -22,8 +22,7 @@ public class OperationTest
             where TOperation : struct, IOperation<TConformance>
         {
             Initializer<TOperation>.Ensure();
-            var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation>()
-                ?? OperationMap.Shared.Get<TConformance, TOperation>();
+            var operationCallback = OperationMap.GetValueOrDefault<TConformance, TOperation>() ?? OperationMap.Shared.Get<TConformance, TOperation>();
             operationCallback(owner, operation);
         }
 
@@ -35,8 +34,7 @@ public class OperationTest
         int Value2 { get; }
 
         new void Perform<TOperation>(in TOperation operation)
-            where TOperation : struct, IOperation<Second>
-            => ((IOperator<Second>)this).Perform(in operation);
+            where TOperation : struct, IOperation<Second> => ((IOperator<Second>)this).Perform(in operation);
     }
 
     public class Second : First, ISecond
@@ -51,8 +49,7 @@ public class OperationTest
         int Value3 { get; }
 
         new void Perform<TOperation>(in TOperation operation)
-            where TOperation : struct, IOperation<Third>
-            => ((IOperator<Third>)this).Perform(in operation);
+            where TOperation : struct, IOperation<Third> => ((IOperator<Third>)this).Perform(in operation);
     }
 
     public class Third : Second, IThird

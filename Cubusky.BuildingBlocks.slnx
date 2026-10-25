@@ -5,6 +5,7 @@
     <File Path=".gitignore" />
     <File Path="CONTRIBUTING.md" />
     <File Path="cspell.json" />
+    <File Path="Directory.Build.props" />
     <File Path="global.json" />
     <File Path="LICENSE" />
     <File Path="README.md" />
