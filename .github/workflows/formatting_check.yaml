@@ -16,6 +16,20 @@ jobs:
         working-directory: '.'
     steps:
       - uses: actions/checkout@v6
-      - run: |
+      
+      - name: Check formatting
+        id: csharpier
+        continue-on-error: true
+        run: |
           dotnet tool restore
-          dotnet csharpier check .
+          dotnet csharpier check . 2>&1 | tee csharpier-report.txt
+
+      - name: Publish formatting report
+        if: always()
+        run: |
+          echo "## Formatting check report" >> "$GITHUB_STEP_SUMMARY"
+          cat csharpier-report.txt >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if formatting is not correct
+        if: steps.csharpier.outcome == 'failure'
+        run: exit 1
