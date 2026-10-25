@@ -15,7 +15,7 @@ jobs:
       run:
         working-directory: '.'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - run: |
           dotnet tool restore
           dotnet csharpier check .
