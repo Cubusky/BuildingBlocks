@@ -140,7 +140,7 @@ public readonly record struct Addition(int Value) : IOperation<First>
 
 Inheritance with `IOperator<T>` requires a specific implementation to avoid name collisions with derived classes, especially when combined with interfaces. The following example demonstrates how to safely implement `IOperator<T>` for a base class and a derived class whilst maintaining type-safety and polymorphic behavior.
 
-The base class should provide a default implementation of the `Perform` method, which can be used by all derived classes. It explicitely implements the `IOperator<First>` interface to avoid name collisions with derived classes. For example:
+The base class should provide a default implementation of the `Perform` method, which can be used by all derived classes. It explicitly implements the `IOperator<First>` interface to avoid name collisions with derived classes. For example:
 
 ```csharp
 public interface IFirst : IOperator<First>;
@@ -163,7 +163,7 @@ public class First : IFirst
 }
 ```
 
-The derived class also explicitely implements the `IOperator<Second>` interface to avoid name collisions with derived classes. It also overrides the `Perform` method to allow for polymorphic behavior. For example:
+The derived class also explicitly implements the `IOperator<Second>` interface to avoid name collisions with derived classes. It also overrides the `Perform` method to allow for polymorphic behavior. For example:
 
 ```csharp
 public interface ISecond : IFirst, IOperator<Second>
