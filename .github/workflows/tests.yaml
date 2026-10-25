@@ -44,5 +44,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: 🧪 Run Tests
-        working-directory: Cubusky.BuildingBlocks.Tests
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --project Cubusky.BuildingBlocks.Tests --no-build --verbosity normal
+
+      - name: 🧪 Run Reactivity Tests
+        run: dotnet test --project Cubusky.BuildingBlocks.Reactivity.Tests --no-build --verbosity normal
