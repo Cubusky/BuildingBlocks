@@ -10,3 +10,4 @@ obj/
 *.DotSettings.user
 *.binlog
 *.g.cs
+.cspellcache

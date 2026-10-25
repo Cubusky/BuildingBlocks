@@ -13,6 +13,7 @@
     <OutputPath>./nupkg</OutputPath>
     <DebugType>portable</DebugType>
     <InvariantGlobalization>true</InvariantGlobalization>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 
     <Title>BuildingBlocks</Title>
     <Version>0.0.0-devbuild</Version>
@@ -50,4 +51,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <Target Name="SpellCheck" BeforeTargets="CoreCompile" Condition="'$(BuildingInsideVisualStudio)' == 'true' And '$(DesignTimeBuild)' != 'true' And '$(SkipSpellCheck)' != 'true'">
+    <Exec Command="npx --yes --prefer-offline --fetch-retries=0 --fetch-timeout=5000 cspell@10.4.0 --no-progress --no-color --no-summary --config ./cspell.json --gitignore --cache &quot;**&quot;" WorkingDirectory="$(MSBuildThisFileDirectory).." ConsoleToMSBuild="true" IgnoreExitCode="true" IgnoreStandardErrorWarningFormat="true" StandardOutputImportance="low">
+      <Output TaskParameter="ConsoleOutput" ItemName="SpellCheckLine" />
+    </Exec>
+    <ItemGroup>
+      <SpellCheckIssue Include="@(SpellCheckLine)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Identity)', '^.+?:\d+:\d+ - '))" />
+    </ItemGroup>
+    <Warning Condition="'@(SpellCheckIssue)' != ''" Code="SPELL" File="$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)..', $([System.Text.RegularExpressions.Regex]::Replace('%(SpellCheckIssue.Identity)', '^(.+?):\d+:\d+ - .*$', '$1'))))" Text="$([System.Text.RegularExpressions.Regex]::Replace('%(SpellCheckIssue.Identity)', '^.+?:(\d+:\d+ - .*)$', '$1'))" />
+  </Target>
 </Project>
