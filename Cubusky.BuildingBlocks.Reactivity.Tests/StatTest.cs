@@ -170,6 +170,13 @@ public class StatTest
     [Fact]
     public void Test2()
     {
+        OperationMap.Shared.Set<HitPoints, Heal, HitPoints.Broadcaster>((owner, in operation, broadcaster) =>
+        {
+            owner.Value -= operation.Value;
+            broadcaster.Broadcast(in operation);
+            broadcaster.Broadcast(new Increase(operation.Value));
+        });
+
         int value1 = 0;
         int value2 = 0;
 
