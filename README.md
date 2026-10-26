@@ -8,6 +8,14 @@ BuildingBlocks is a generic implementation of the command pattern that allows yo
 
 BuildingBlocks allows you to make as many commands, hereto referred to as operations, as you want in the form of structs that implement the `IOperation<T>` interface, where `T` is the type of the class that they should be allowed to perform operations on. This allows you to add operations to a class without modifying its underlying data or exposing its internal state. Because of this rigid type-safety, we can ensure that operations are never boxed and can only be invoked on types that they conform to.
 
+### ✨ Set up once, enjoy clean syntax forever
+
+```csharp
+var first = new First(5);
+first.Perform(new Addition(5));
+Console.WriteLine(first.Value); // Outputs 10
+```
+
 ## 🐕 Installation
 
 Find the latest version of [Cubusky.BuildingBlocks][nuget] on nuget.
@@ -18,7 +26,11 @@ dotnet add package Cubusky.BuildingBlocks
 
 ## 🪾 Extendable and Overridable
 
-Ever wanted to add a method to a class that you don't own? Or maybe you want to add a method to a class that you do own, but you want to allow users of your class to override the behavior of that method? BuildingBlocks allows you to do both.
+Ever wanted to add a method to a class that you don't own? 
+<br/>
+Or maybe you do own the class, but you want users to be able to override and extend it? 
+<br/>
+BuildingBlocks allows you to do both!
 
 It allows **you** to provide sensible defaults and **your users** the freedom to extend and override them.
 
@@ -197,6 +209,9 @@ second.Perform(new Addition(5));
 ifirst.Perform(new Addition(5));
 isecond.Perform(new Addition(5));
 ```
+
+> [!Note]
+> BuildingBlocks cheats here a little by providing an extension method for `IOperator<T>` that kicks in when `T` references itself. 🤫
 
 ## 🐦‍🔥 Operation Priority
 
