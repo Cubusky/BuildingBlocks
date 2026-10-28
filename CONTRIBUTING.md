@@ -17,9 +17,11 @@ In short:
 
 ## Coding Guidelines
 
-Your IDE should automatically format your code to our preferred [CSharpier][csharpier] configuration on build. For a more comfortable coding experience, we recommend installing the [CSharpier plugin][csharpier-editors] for your IDE, so your code is automatically formatted on save as well.
+This project uses [Husky.Net][husky] to run git hooks. Once you have cloned the repository, build the project and husky should be installed automatically. If you have any issues, please refer to the [Husky.Net documentation][husky] for help.
 
-All our code is written in US English and spellchecked with [CSpell][cspell] in our CI/CD pipeline. If you use any non-English words, please add them to the `cspell.json` file in the root of the repository.
+All of our code is formatted with [CSharpier][csharpier] on pre-commit. If your code looks different after committing, this is why. For a more comfortable coding experience, we recommend installing the [CSharpier plugin][csharpier-editors] for your IDE and enabling format on save, so your code is automatically formatted on save as well.
+
+All our code is written in US English and spellchecked with [CSpell][cspell] in our CI/CD pipeline. If there are any spelling errors, these should be caught during pre-commit. If you use any non-English words, please add them to the `cspell.json` file in the root of the repository.
 
 If you need support or guidance, feel free to reach out to us on our [Discord Server][discord]. We're glad to help!
 
@@ -28,6 +30,7 @@ If you need support or guidance, feel free to reach out to us on our [Discord Se
 [discord]: https://discord.gg/c979gvkHdb
 [website]: https://cubusky.code
 [covenant]: https://www.contributor-covenant.org/version/2/1/code_of_conduct/
+[husky]: https://alirezanet.github.io/Husky.Net/
 [csharpier]: https://csharpier.com/
 [csharpier-editors]: https://csharpier.com/docs/Editors
 [cspell]: https://cspell.org/
