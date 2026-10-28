@@ -22,11 +22,6 @@ namespace Cubusky.BuildingBlocks.Tests
             operationCallback(owner, operation);
         }
 
-        public class Broadcaster
-        {
-            internal Broadcaster(int i) { }
-        }
-
         void IOperator<First>.Perform<TOperation>(in TOperation operation) => Perform(this, in operation);
     }
 

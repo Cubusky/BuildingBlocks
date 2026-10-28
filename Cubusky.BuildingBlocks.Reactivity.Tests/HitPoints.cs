@@ -16,10 +16,7 @@ public class HitPoints : Stat, IHitPoints
 {
     private readonly Broadcaster _broadcaster;
 
-    public HitPoints()
-    {
-        _broadcaster = new Broadcaster(Subject);
-    }
+    public HitPoints() => _broadcaster = new Broadcaster(Subject);
 
     public new Binding Bind() => new(Subject);
 
