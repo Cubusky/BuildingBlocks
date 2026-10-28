@@ -1,0 +1,63 @@
+{
+  "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+  "tasks": [
+    {
+      "name": "csharpier",
+      "group": "pre-commit",
+      "command": "dotnet",
+      "args": [ "csharpier", "format", "${staged}" ],
+      "include": [ "**/*.cs", "**/*.csx", "**/*.csproj", "**/*.props", "**/*.targets", "**/*.xml", "**/*.config" ]
+    },
+    {
+      "name": "install-cspell",
+      "group": "pre-commit",
+      "command": "bash",
+      "args": [ "-c", "command -v cspell >/dev/null 2>&1 || npm install -g cspell" ],
+      "windows": {
+        "command": "cmd",
+        "args": [ "/c", "where cspell >nul 2>&1 || npm install -g cspell" ]
+      }
+    },
+    {
+      "name": "cspell",
+      "group": "pre-commit",
+      "command": "cspell",
+      "args": [ "--no-must-find-files", "--no-progress", "--show-context", "--show-suggestions", "${staged}" ],
+      "windows": {
+        "command": "cmd",
+        "args": [ "/c", "cspell", "--no-must-find-files", "--no-progress", "--show-context", "--show-suggestions", "${staged}" ]
+      }
+    },
+    {
+      "name": "install-cspell-commit-msg",
+      "group": "commit-msg",
+      "command": "bash",
+      "args": [ "-c", "command -v cspell >/dev/null 2>&1 || npm install -g cspell" ],
+      "windows": {
+        "command": "cmd",
+        "args": [ "/c", "where cspell >nul 2>&1 || npm install -g cspell" ]
+      }
+    },
+    {
+      "name": "cspell-commit-msg",
+      "group": "commit-msg",
+      "command": "cspell",
+      "args": [ "--no-summary", "--no-progress", "--show-context", "--show-suggestions", "--language-id", "commit-msg", "${args}" ],
+      "windows": {
+        "command": "cmd",
+        "args": [ "/c", "cspell", "--no-summary", "--no-progress", "--show-context", "--show-suggestions", "--language-id", "commit-msg", "${args}" ]
+      }
+    },    {
+      "name": "build",
+      "group": "pre-push",
+      "command": "dotnet",
+      "args": [ "build", "--nologo" ]
+    },
+    {
+      "name": "test",
+      "group": "pre-push",
+      "command": "dotnet",
+      "args": [ "test", "--no-build" ]
+    }
+  ]
+}
